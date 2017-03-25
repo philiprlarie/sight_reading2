@@ -10,10 +10,11 @@ Controller.currentlyPlaying = false;
 
 Controller.play = function () {
   var self = this;
-  Controller.requestResetPressedNotes();
   if (!Model.melody) {
     throw 'Controller::play there is no melody';
   }
+  Controller.requestResetMelodyPlayedCorrectly();
+  Controller.requestDrawMelody(Model.melody);
   self.currentlyPlaying = true;
 
   var melody = Model.melody;
@@ -23,6 +24,7 @@ Controller.play = function () {
   var noteListeningBuffer = 250; // milliseconds before/after note sounds where we register note being played
 
   function startNoteHandlerAndSetUpEnd () {
+    Controller.requestResetPressedNotes();
     var curNote = melody.notes[notesPlayed];
 
     // play current note at correct time
@@ -101,6 +103,14 @@ Controller.requestResetPressedNotes = function () {
 
 Controller.requestDrawNote = function (note) {
   View.drawNote(note);
+};
+
+Controller.requestDrawMelody = function (melody) {
+  View.drawMelody(melody);
+};
+
+Controller.requestResetMelodyPlayedCorrectly = function () {
+  Model.resetMelodyPlayedCorrectly();
 };
 
 function playNote (note) {

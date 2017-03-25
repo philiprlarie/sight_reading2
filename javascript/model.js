@@ -8,6 +8,10 @@ Model.setNewMelody = function (clef) {
   this.melody = new Melody(clef);
 };
 
+Model.resetMelodyPlayedCorrectly = function () {
+  this.melody.resetPlayedCorreclty();
+};
+
 function Note (pitch, dur, timing) {
   this.pitch = pitch;
   this.dur = dur; // how many beats
@@ -49,4 +53,10 @@ Melody.prototype.addNote = function (note) {
   note.timing = this.totDur;
   this.notes.push(note);
   this.totDur += note.dur;
+};
+
+Melody.prototype.resetPlayedCorreclty = function () {
+  this.notes.forEach(function (note) {
+    note.isPlayedCorrectly = undefined;
+  });
 };
