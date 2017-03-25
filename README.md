@@ -1,0 +1,1 @@
+Notes have a `duration` and a `timing` attribute. These are both measured in number of beats. For 4/4 time, a quarter note at the beginning of measure 2 would have `duration === 1` and `timing === 4`.

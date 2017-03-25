@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Sight Reading</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/master.css" media="screen" title="no title" charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="javascript/utils.js"></script>
+  <script type="text/javascript" src="javascript/model.js"></script>
+  <script type="text/javascript" src="javascript/controller.js"></script>
+  <script type="text/javascript" src="javascript/view.js"></script>
+  <script type="text/javascript" src="javascript/viewDrawing.js"></script>
+  <script type="text/javascript" src="javascript/viewEventListeners.js"></script>
+  <script type="text/javascript" src="javascript/setUp.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="text-center margin-top-40">Sight Reading Practice</h1>
+    <p>This application can help you learn the names of the notes on the grand staff. When you click "play" (or press spacebar), the playback begins starting with a four beat count in. As each note plays, type the corresponding letter on your keyboard. For example, if the next note is middle C, press the "c" key on your keyboard. Make sure to keep a steady rhythm because key presses that are too early or too late won't count.</p>
+    <p>Generate new random melody by clicking the "Generate New Melody" button. You can generate new melodies only bass clef notes, only treble clef notes, or notes fromt he full grand staff. You also have the option of changing the tempo to suit your practicing needs.</p>
+    <h3 id="score"></h3>
+    <canvas id="canvas" width="900" height="300"></canvas>
+    <div class="row margin-top-20">
+      <div class="col-xs-2 col-xs-offset-3">
+        <button id="play" class="btn btn-primary btn-lg" type="button" name="button">Play</button>
+      </div>
+      <div class="col-xs-2 col-xs-offset-2">
+        <button id="stop" class="btn btn-default btn-lg" type="button" name="stop">Stop</button>
+      </div>
+    </div>
+
+    <div class="row margin-top-20">
+      <div class="col-xs-2 col-xs-offset-3">
+        <label for="tempo">Tempo</label>
+        <input id="tempo" class="form-control" type="number" min="20" max="140" step="1" value="60" />
+      </div>
+      <div class="col-xs-2 col-xs-offset-2">
+        <button id="new-melody" class="btn btn-default btn-lg center-block" type="button" name="new-melody">Generate New Melody</button>
+      </div>
+    </div>
+    <div class="row margin-top-20">
+      <div class="col-xs-2 col-xs-offset-3">
+        <label>Which clef
+          <br/>
+          <input type="radio" name="clef" value="both" checked> Both
+          <br/>
+          <input type="radio" name="clef" value="treble"> Treble
+          <br/>
+          <input type="radio" name="clef" value="bass"> Bass
+        </label>
+      </div>
+    </div>
+    <div class="margin-top-40"></div>
+    <!-- these divs are hidden -->
+    <div id="audio-els"></div>
+    <div id="audio-click"></div>
+  </div>
+</body>
+
+</html>
