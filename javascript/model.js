@@ -24,28 +24,26 @@ Array.prototype.sample = function () {
   return this[Math.floor(Math.random() * this.length)];
 };
 
-function Melody (clef) {
-  this.notes = [];
-  this.totDur = 0;
-
-  for (var countOff = 0; countOff < 4; countOff++) {
-    this.addNote(new Note('tick', 1));
+function Melody (clef, type) {
+  var pitches;
+  switch (clef) {
+    case 'treble':
+      pitches = Utils.TREBLE_CLEF_PITCHES;
+      break;
+    case 'bass':
+      pitches = Utils.BASS_CLEFF_PITCHES;
+      break;
+    default:
+      pitches = Utils.ALL_PITCHES;
   }
 
-  for (var i = 0; i <= 15; i++) {
-    clef = clef || 'both';
-    var note;
-    switch (clef) {
-      case 'treble':
-        note = new Note(Utils.ALL_PITCHES.slice(13).sample(), 1);
-        break;
-      case 'bass':
-        note = new Note(Utils.ALL_PITCHES.slice(0, 16).sample(), 1);
-        break;
-      default:
-        note = new Note(Utils.ALL_PITCHES.sample(), 1);
-    }
-    this.addNote(note);
+  switch (type) {
+    case 'QUARTER_AND_EIGHT_NOTES':
+      createMelodyQuarterAndEightNotes.call(this, pitches, 16);
+      break;
+    case 'QUARTER_NOTES':
+    default:
+      createMelodyQuarterNotes.call(this, pitches, 16);
   }
 }
 
@@ -55,8 +53,57 @@ Melody.prototype.addNote = function (note) {
   this.totDur += note.dur;
 };
 
+Melody.prototype.removeLastNote = function () {
+  var removedNote = this.notes.pop();
+  this.totDur -= removedNote.dur;
+};
+
 Melody.prototype.resetPlayedCorreclty = function () {
   this.notes.forEach(function (note) {
     note.isPlayedCorrectly = undefined;
   });
 };
+
+function createMelodyQuarterNotes (pitches, melodyDuration, countOffDuration) {
+  // melodyDuration in beats (quarter note beats)
+  this.notes = [];
+  this.totDur = 0;
+
+  if (!(countOffDuration === 0)) {
+    countOffDuration = countOffDuration || 4;
+  }
+  for (var countOff = 0; countOff < countOffDuration; countOff++) {
+    this.addNote(new Note('tick', 1));
+  }
+
+  while (this.totDur < melodyDuration + countOffDuration) {
+    var note = new Note(pitches.sample(), 1);
+    this.addNote(note);
+  }
+}
+
+function createMelodyQuarterAndEightNotes (pitches, melodyDuration, countOffDuration) {
+  // melodyDuration in beats (quarter note beats)
+  this.notes = [];
+  this.totDur = 0;
+
+  if (!(countOffDuration === 0)) {
+    countOffDuration = countOffDuration || 4;
+  }
+  for (var countOff = 0; countOff < countOffDuration; countOff++) {
+    this.addNote(new Note('tick', 1));
+  }
+
+  var possibleNoteDurations = [0.5, 1];
+  var note;
+  while (this.totDur < melodyDuration + countOffDuration) {
+    note = new Note(pitches.sample(), possibleNoteDurations.sample());
+    this.addNote(note);
+  }
+
+  if (this.totDur > melodyDuration + countOffDuration) {
+    this.removeLastNote();
+    note = new Note(pitches.sample(), 0.5);
+    this.addNote(note);
+  }
+}

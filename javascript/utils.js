@@ -10,6 +10,8 @@ numbers.forEach(function (num) {
     Utils.ALL_PITCHES.push(letter + num);
   });
 });
+Utils.TREBLE_CLEF_PITCHES = Utils.ALL_PITCHES.slice(13);
+Utils.BASS_CLEFF_PITCHES = Utils.ALL_PITCHES.slice(0, 16);
 
 // the position of the note pitches relative to middle c
 Utils.NOTE_POS = {};

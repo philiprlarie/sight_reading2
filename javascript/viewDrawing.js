@@ -12,6 +12,7 @@ $(function () {
 });
 var LINE_SPACING = 15; // pixels
 var SIG_SPACE = 100; // pixels. this is space for key sig, time sig, clefs
+var SPACE_AFTER_MEASURE_BAR = 20; // pixels. the first note that appears after a measure bar will be SPACE_AFTER_MEASURE_BAR pixels after that bar
 
 Drawing.drawMelody = function (melody) {
   // draw melody -> draw each note -> draw ledger lines
@@ -70,7 +71,7 @@ function drawMeasureBars (melody) {
   context.beginPath();
   context.moveTo(0, canvas.height / 2 + LINE_SPACING * 5);
   context.lineTo(0, canvas.height / 2 - LINE_SPACING * 5);
-  for (var i = 1; i <= 4; i++) { // jshint ignore:line
+  for (var i = 1; i <= 4; i++) {
     var xPos = SIG_SPACE + (canvas.width - SIG_SPACE) * i / 4;
     context.moveTo(xPos, canvas.height / 2 + LINE_SPACING * 5);
     context.lineTo(xPos, canvas.height / 2 - LINE_SPACING * 5);

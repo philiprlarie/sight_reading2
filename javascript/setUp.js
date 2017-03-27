@@ -4,6 +4,6 @@ var Model = window.Model || (window.Model = {});
 var View = window.View || (window.View = {});
 
 $(function () {
-  Model.setNewMelody();
+  Model.setNewMelody('treble');
   View.drawMelody(Model.melody);
 });
