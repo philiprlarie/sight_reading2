@@ -4,8 +4,8 @@
 var Model = window.Model || (window.Model = {});
 var Utils = window.Utils || (window.Utils = {});
 
-Model.setNewMelody = function (clef) {
-  this.melody = new Melody(clef);
+Model.setNewMelody = function (clef, type) {
+  this.melody = new Melody(clef, type);
 };
 
 Model.resetMelodyPlayedCorrectly = function () {

@@ -2,8 +2,10 @@ var View = window.View || (window.View = {});
 
 $(function () {
   $('#new-melody').on('click', function (event) {
+    // TODO: clean up these selectors
     var clef = $(':radio:checked')[0].value;
-    View.requestNewMelody(clef);
+    var type = $(':radio:checked')[1].value;
+    View.requestNewMelody(clef, type);
   });
 
   $('#play').on('click', function (event) {
@@ -36,7 +38,7 @@ $(function () {
     }
     var letter = String.fromCharCode(event.charCode).toUpperCase();
     if (View.arrowsUpDown.upArrow) {
-      letter += 's';
+      letter += '#';
     } else if (View.arrowsUpDown.downArrow) {
       letter += 'b';
     }

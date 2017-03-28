@@ -51,7 +51,7 @@ Controller.play = function () {
     } else {
       curNote.isPlayedCorrectly = false;
     }
-    Controller.requestDrawNote(curNote);
+    Controller.requestDrawMelody(melody);
     Controller.requestResetPressedNotes();
 
     notesPlayed++;
@@ -80,8 +80,8 @@ Controller.stop = function () {
   stopTimeouts();
 };
 
-Controller.newMelody = function (clef) {
-  Model.setNewMelody(clef);
+Controller.newMelody = function (clef, type) {
+  Model.setNewMelody(clef, type);
   View.drawMelody(Model.melody);
 };
 
@@ -101,9 +101,9 @@ Controller.requestResetPressedNotes = function () {
   }
 };
 
-Controller.requestDrawNote = function (note) {
-  View.drawNote(note);
-};
+// Controller.requestDrawNote = function (note) {
+//   View.drawNote(note);
+// };
 
 Controller.requestDrawMelody = function (melody) {
   View.drawMelody(melody);

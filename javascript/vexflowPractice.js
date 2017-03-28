@@ -1,3 +1,4 @@
+/* eslint-disable */
 $(function () {
 
   VF = Vex.Flow;
@@ -29,16 +30,16 @@ $(function () {
 
 
   var notes = [
-      new VF.StaveNote({clef: "treble", keys: ["e##/5"], duration: "8d" }).
+      new VF.StaveNote({clef: "treble", keys: ["E##/5"], duration: "8d" }).
         addAccidental(0, new VF.Accidental("##")).addDotToAll(),
 
-      new VF.StaveNote({clef: "treble", keys: ["eb/5"], duration: "16" }).
+      new VF.StaveNote({clef: "treble", keys: ["Eb/5"], duration: "16" }).
         addAccidental(0, new VF.Accidental("b")),
 
-      new VF.StaveNote({clef: "treble", keys: ["d/5", "eb/4"], duration: "h" }).
+      new VF.StaveNote({clef: "treble", keys: ["E/5", "Eb/4"], duration: "h" }).
           addDot(0),
 
-      new VF.StaveNote({clef: "treble", keys: ["c/5", "eb/5", "g#/5"], duration: "q" }).
+      new VF.StaveNote({clef: "treble", keys: ["C/5", "Eb/5", "G#/5"], duration: "q" }).
         addAccidental(1, new VF.Accidental("b")).
         addAccidental(2, new VF.Accidental("#")).addDotToAll()
     ];
@@ -79,6 +80,11 @@ $(function () {
         addAccidental(1, new VF.Accidental("b")).
         addAccidental(2, new VF.Accidental("#")).addDotToAll()
     ];
+
+    notes2[0].setStyle({fillStyle: "red", shadowColor: "red", shadowBlur: 100})//, shadowColor: "yellow", shadowBlur: 3});
+    notes2[1].setStyle({fillStyle: "green", shadowColor: "green", shadowBlur: 100})//, shadowColor: "yellow", shadowBlur: 3});
+    notes2[2].setStyle({fillStyle: "red", shadowColor: "red", shadowBlur: 100})//, shadowColor: "yellow", shadowBlur: 3});
+    notes2[3].setStyle({fillStyle: "green", shadowColor: "green", shadowBlur: 100})//, shadowColor: "yellow", shadowBlur: 3});
 
     var beams = VF.Beam.generateBeams(notes2);
   VF.Formatter.FormatAndDraw(context, stave, notes2);
