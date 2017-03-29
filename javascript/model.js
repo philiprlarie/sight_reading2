@@ -25,6 +25,8 @@ Array.prototype.sample = function () {
 };
 
 function Melody (clef, type) {
+  this.clef = clef;
+
   var pitches;
   switch (clef) {
     case 'treble':
@@ -32,6 +34,9 @@ function Melody (clef, type) {
       break;
     case 'bass':
       pitches = Utils.BASS_CLEFF_PITCHES;
+      break;
+    case 'rhythm_only':
+      pitches = ['B4'];
       break;
     default:
       pitches = Utils.ALL_PITCHES;

@@ -3,13 +3,14 @@ var View = window.View || (window.View = {});
 $(function () {
   $('#new-melody').on('click', function (event) {
     // TODO: clean up these selectors
-    var clef = $(':radio:checked')[0].value;
-    var type = $(':radio:checked')[1].value;
+    var clef = $('#clef').val();
+    var type = $('#rhythm').val();
     View.requestNewMelody(clef, type);
   });
 
   $('#play').on('click', function (event) {
-    View.requestPlay(false, 4);
+    var metronome = $('#metronome').is(':checked');
+    View.requestPlay(metronome, 4);
   });
 
   $('#stop').on('click', function (event) {
@@ -23,6 +24,7 @@ $(function () {
   // pressing pitch names along with up/down arrows for sharp/flats
   $(window).keypress(handleKeyPress); // most keys
   $(window).keydown(handleKeyUpDown); // only up and down arrows
+  $(window).keyup(handleKeyUpDown); // only up and down arrows
 
   function handleKeyPress (event) {
     $('button').blur();

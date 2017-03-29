@@ -24,7 +24,7 @@ Drawing.drawMelody = function (melody) {
   var measures = splitIntoMeasuresResults[0];
   var ties = splitIntoMeasuresResults[1];
   for (var i = 0; i < measures.length; i++) {
-    drawMeasure(measures[i], i);
+    drawMeasure(measures[i], i, melody.clef);
   }
   ties.forEach(function (t) {
     t.setContext(context).draw();
@@ -35,6 +35,7 @@ function splitIntoMeasures (melody) {
   // doesn't handle notes so long that they span into three measures
   var measures = [];
   var ties = [];
+  var clef = melody.clef === 'bass' ? 'bass' : 'treble';
 
   for (var i = 0; i < melody.notes.length; i++) {
     var note = melody.notes[i];
@@ -50,8 +51,8 @@ function splitIntoMeasures (melody) {
     if (measureNumberOfStartOfNote === measureNumberOfEndOfNote) {
       // note is fully contained in one measure
       var vfNote = new VF.StaveNote({
-        clef: 'treble',
-        keys: [isRest ? vfPitch('b4') : vfPitch(note.pitch)],
+        clef: clef,
+        keys: [vfPitch(note.pitch, clef)],
         duration: vfDuration(note.dur, isRest)
       });
       colorNote(note, vfNote);
@@ -61,13 +62,13 @@ function splitIntoMeasures (melody) {
       var beforeBarLength = 4 - note.timing % 4;
       var afterBarLength = (note.timing + note.dur) % 4;
       var firstVfNote = new VF.StaveNote({
-        clef: 'treble',
-        keys: [isRest ? vfPitch('b4') : vfPitch(note.pitch)],
+        clef: clef,
+        keys: [vfPitch(note.pitch, clef)],
         duration: vfDuration(beforeBarLength, isRest)
       });
       var secondVfNote = new VF.StaveNote({
-        clef: 'treble',
-        keys: [isRest ? vfPitch('b4') : vfPitch(note.pitch)],
+        clef: clef,
+        keys: [vfPitch(note.pitch, clef)],
         duration: vfDuration(afterBarLength, isRest)
       });
       colorNote(note, firstVfNote);
@@ -100,7 +101,10 @@ function vfDuration (duration, isRest) {
   return isRest ? vfDurationMap[duration] + 'r' : vfDurationMap[duration];
 }
 
-function vfPitch (pitch) {
+function vfPitch (pitch, clef) {
+  if (pitch === 'rest') {
+    return clef === 'bass' ? 'D/3' : 'B/4';
+  }
   return pitch.slice(0, -1).replace(/s/, '#') + '/' + pitch.slice(-1);
 }
 
@@ -112,10 +116,14 @@ function colorNote (note, vfNote) {
   }
 }
 
-function drawMeasure (measure, measureNumber) {
+function drawMeasure (measure, measureNumber, clef) {
   var stave = new VF.Stave(10 + measureNumber * 200, 40, 200);
   if (measureNumber === 0) {
-    stave.addClef('treble').addTimeSignature('4/4');
+    if (clef === 'bass') {
+      stave.addClef('bass').addTimeSignature('4/4');
+    } else {
+      stave.addClef('treble').addTimeSignature('4/4');
+    }
   }
   stave.setContext(context).draw();
   var beams = VF.Beam.generateBeams(measure);
