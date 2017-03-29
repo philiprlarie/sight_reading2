@@ -49,6 +49,9 @@ ul li:before {
 .margin-bottom-0 {
   margin-bottom: 0;
 }
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
 .margin-left-20 {
   margin-left: 20px;
 }

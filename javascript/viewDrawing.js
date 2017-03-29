@@ -13,7 +13,7 @@ $(function () {
   var svgHolder = document.getElementById('svg-holder');
   renderer = new VF.Renderer(svgHolder, VF.Renderer.Backends.SVG);
 
-  renderer.resize(900, 300);
+  renderer.resize(900, 200);
   context = renderer.getContext();
   context.setFont('Arial', 10, '').setBackgroundFillStyle('#eed');
 });

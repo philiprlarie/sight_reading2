@@ -1,12 +1,14 @@
 var View = window.View || (window.View = {});
 
 $(function () {
-  $('#new-melody').on('click', function (event) {
-    // TODO: clean up these selectors
+  function requestNewMelody () {
     var clef = $('#clef').val();
     var type = $('#rhythm').val();
     View.requestNewMelody(clef, type);
-  });
+  }
+  $('#new-melody').on('click', requestNewMelody);
+  $('#rhythm').change(requestNewMelody);
+  $('#clef').change(requestNewMelody);
 
   $('#play').on('click', function (event) {
     var metronome = $('#metronome').is(':checked');
