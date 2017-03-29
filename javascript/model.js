@@ -41,6 +41,12 @@ function Melody (clef, type) {
     case 'QUARTER_AND_EIGHT_NOTES':
       createMelodyQuarterAndEightNotes.call(this, pitches, 16);
       break;
+    case 'QUARTER_AND_EIGHT_NOTES_WITH_RESTS':
+      createMelodyQuarterAndEightNotesWithRests.call(this, pitches, 16);
+      break;
+    case 'QUARTER_NOTES_WITH_RESTS':
+      createMelodyQuarterNotesWithRests.call(this, pitches, 16);
+      break;
     case 'QUARTER_NOTES':
     default:
       createMelodyQuarterNotes.call(this, pitches, 16);
@@ -82,6 +88,34 @@ function createMelodyQuarterNotes (pitches, melodyDuration, countOffDuration) {
   }
 }
 
+function createMelodyQuarterNotesWithRests (pitches, melodyDuration, countOffDuration, portionRests) {
+  // melodyDuration in beats (quarter note beats)
+  this.notes = [];
+  this.totDur = 0;
+
+
+  if (!(portionRests === 0)) {
+    portionRests = portionRests || 0.25;
+  }
+  if (!(countOffDuration === 0)) {
+    countOffDuration = countOffDuration || 4;
+  }
+  for (var countOff = 0; countOff < countOffDuration; countOff++) {
+    this.addNote(new Note('tick', 1));
+  }
+
+  while (this.totDur < melodyDuration + countOffDuration) {
+    var randNum = Math.random();
+    var note;
+    if (randNum < portionRests) {
+      note = new Note('rest', 1);
+    } else {
+      note = new Note(pitches.sample(), 1);
+    }
+    this.addNote(note);
+  }
+}
+
 function createMelodyQuarterAndEightNotes (pitches, melodyDuration, countOffDuration) {
   // melodyDuration in beats (quarter note beats)
   this.notes = [];
@@ -104,6 +138,60 @@ function createMelodyQuarterAndEightNotes (pitches, melodyDuration, countOffDura
   if (this.totDur > melodyDuration + countOffDuration) {
     this.removeLastNote();
     note = new Note(pitches.sample(), 0.5);
+    this.addNote(note);
+  }
+}
+
+function createMelodyQuarterAndEightNotesWithRests (pitches, melodyDuration, countOffDuration, portionRests) {
+  // melodyDuration in beats (quarter note beats)
+  this.notes = [];
+  this.totDur = 0;
+
+  if (!(portionRests === 0)) {
+    portionRests = portionRests || 0.25;
+  }
+  if (!(countOffDuration === 0)) {
+    countOffDuration = countOffDuration || 4;
+  }
+  for (var countOff = 0; countOff < countOffDuration; countOff++) {
+    this.addNote(new Note('tick', 1));
+  }
+
+  var possibleNoteDurations = [0.5, 1];
+  var note;
+  var duration;
+  var pitch;
+  while (this.totDur < melodyDuration + countOffDuration) {
+    var randNum = Math.random();
+    pitch = randNum < portionRests ? 'rest' : pitches.sample();
+    duration = possibleNoteDurations.sample();
+
+    var previousNote = this.notes[this.notes.length - 1];
+    if (this.totDur + duration > melodyDuration + countOffDuration) {
+      // last note extends beyone end of melody
+      duration = 0.5;
+    }
+
+    // quarter note rests should not fall on the off beat. write that as two eighth note rests. eighth rests should combine to quarter note rests when appropriate
+    if (pitch === 'rest' && this.totDur % 1 === 0.5) {
+      // combine rests with previous eighth rests.
+      if (previousNote && previousNote.pitch === 'rest') {
+        if (duration === 0.5) {
+          this.removeLastNote();
+          duration = 1;
+        } else { // duration === 1
+          this.removeLastNote();
+          this.addNote(new Note('rest', 1));
+          duration = 0.5;
+        }
+      } else if (duration === 1) {
+        // quarter note rest should be split when it falls on the off beat
+        this.addNote(new Note('rest', 0.5));
+        duration = 0.5;
+      }
+    }
+
+    note = new Note(pitch, duration);
     this.addNote(note);
   }
 }

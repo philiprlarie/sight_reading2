@@ -8,7 +8,7 @@ $(function () {
   var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
 
   // Configure the rendering context.
-  renderer.resize(900, 900);
+  renderer.resize(900, 300);
   var context = renderer.getContext();
   context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
 
@@ -30,13 +30,13 @@ $(function () {
 
 
   var notes = [
-      new VF.StaveNote({clef: "treble", keys: ["E##/5"], duration: "8d" }).
+      new VF.StaveNote({clef: "treble", keys: ["E##/5"], duration: "qr" }).
         addAccidental(0, new VF.Accidental("##")).addDotToAll(),
 
-      new VF.StaveNote({clef: "treble", keys: ["Eb/5"], duration: "16" }).
+      new VF.StaveNote({clef: "treble", keys: ["Eb/5"], duration: "16r" }).
         addAccidental(0, new VF.Accidental("b")),
 
-      new VF.StaveNote({clef: "treble", keys: ["E/5", "Eb/4"], duration: "h" }).
+      new VF.StaveNote({clef: "treble", keys: ["E/5", "Eb/4"], duration: "hr" }).
           addDot(0),
 
       new VF.StaveNote({clef: "treble", keys: ["C/5", "Eb/5", "G#/5"], duration: "q" }).

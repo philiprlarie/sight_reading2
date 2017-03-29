@@ -8,7 +8,7 @@ Controller.tempo = 60;
 
 Controller.currentlyPlaying = false;
 
-Controller.play = function () {
+Controller.play = function (metronome, countOff) {
   var self = this;
   if (!Model.melody) {
     throw 'Controller::play there is no melody';
@@ -21,7 +21,21 @@ Controller.play = function () {
   var beatLength = 1 / (self.tempo) * 60 * 1000; // milliseconds
   var startTime = new Date().getTime();
   var notesPlayed = 0;
+  var metronomeClicks = 0;
   var noteListeningBuffer = 250; // milliseconds before/after note sounds where we register note being played
+
+  function playMetronome () {
+    // play current note at correct time
+    playNote({ pitch: 'tick' });
+    metronomeClicks++;
+    var nextClickTimingMs = metronomeClicks * beatLength;
+    var curTime = new Date().getTime();
+    var nextClickDelay = nextClickTimingMs - (curTime - startTime);
+
+    if (metronomeClicks < melody.totDur) {
+      setTimeout(playMetronome, nextClickDelay);
+    }
+  }
 
   function startNoteHandlerAndSetUpEnd () {
     Controller.requestResetPressedNotes();
@@ -72,6 +86,9 @@ Controller.play = function () {
     setTimeout(startNoteHandlerAndSetUpEnd, nextNoteStartDelay);
   }
 
+  if (metronome) {
+    playMetronome();
+  }
   startNoteHandlerAndSetUpEnd();
 };
 
@@ -90,6 +107,9 @@ Controller.setTempo = function (tempo) {
 };
 
 Controller.checkNotePlayed = function (note) {
+  if (note.pitch === 'rest') {
+    return !Object.values(View.pressedNotes).includes(true);
+  }
   return View.pressedNotes[note.pitch.slice(0, -1)];
 };
 
@@ -101,10 +121,6 @@ Controller.requestResetPressedNotes = function () {
   }
 };
 
-// Controller.requestDrawNote = function (note) {
-//   View.drawNote(note);
-// };
-
 Controller.requestDrawMelody = function (melody) {
   View.drawMelody(melody);
 };
@@ -114,6 +130,9 @@ Controller.requestResetMelodyPlayedCorrectly = function () {
 };
 
 function playNote (note) {
+  if (note.pitch === 'rest') {
+    return;
+  }
   var buffer = Utils.getNoteBuffer(note.pitch);
   var sourceNode = audioContext.createBufferSource();
   sourceNode.buffer = buffer;

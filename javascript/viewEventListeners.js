@@ -38,7 +38,7 @@ $(function () {
     }
     var letter = String.fromCharCode(event.charCode).toUpperCase();
     if (View.arrowsUpDown.upArrow) {
-      letter += '#';
+      letter += 's';
     } else if (View.arrowsUpDown.downArrow) {
       letter += 'b';
     }
