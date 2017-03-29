@@ -26,14 +26,14 @@ View.drawMelody = function (melody) {
 // };
 
 // Event handler methods of view
-View.requestPlay = function () {
-  Controller.currentlyPlaying || Controller.play();
+View.requestPlay = function (isMetronomeOn, countOff) {
+  Controller.currentlyPlaying || Controller.play(isMetronomeOn, countOff);
 };
 View.requestStop = function () {
   Controller.stop();
 };
-View.requestTogglePlay = function () {
-  Controller.currentlyPlaying ? Controller.stop() : Controller.play();
+View.requestTogglePlay = function (isMetronomeOn, countOff) {
+  Controller.currentlyPlaying ? Controller.stop() : Controller.play(isMetronomeOn, countOff);
 };
 View.requestNewMelody = function (clef, type) {
   Controller.currentlyPlaying || Controller.newMelody(clef, type);

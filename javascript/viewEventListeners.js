@@ -9,7 +9,7 @@ $(function () {
   });
 
   $('#play').on('click', function (event) {
-    View.requestPlay();
+    View.requestPlay(false, 4);
   });
 
   $('#stop').on('click', function (event) {
@@ -28,7 +28,7 @@ $(function () {
     $('button').blur();
     if (event.charCode === 32) { // start/stop playback on spacebar
       event.preventDefault();
-      View.requestTogglePlay();
+      View.requestTogglePlay(false, 4);
     }
     if (event.charCode === 13) { // generate new melody on carriage return
       event.preventDefault();

@@ -18,8 +18,10 @@ Controller.play = function (metronome, countOff) {
   self.currentlyPlaying = true;
 
   var melody = Model.melody;
+  countOff = countOff || 0;
   var beatLength = 1 / (self.tempo) * 60 * 1000; // milliseconds
   var startTime = new Date().getTime();
+  var melodyStartTime = startTime + countOff * beatLength;
   var notesPlayed = 0;
   var metronomeClicks = 0;
   var noteListeningBuffer = 250; // milliseconds before/after note sounds where we register note being played
@@ -30,7 +32,7 @@ Controller.play = function (metronome, countOff) {
     metronomeClicks++;
     var nextClickTimingMs = metronomeClicks * beatLength;
     var curTime = new Date().getTime();
-    var nextClickDelay = nextClickTimingMs - (curTime - startTime);
+    var nextClickDelay = nextClickTimingMs - (curTime - melodyStartTime);
 
     if (metronomeClicks < melody.totDur) {
       setTimeout(playMetronome, nextClickDelay);
@@ -44,7 +46,7 @@ Controller.play = function (metronome, countOff) {
     // play current note at correct time
     var curNoteTimingMs = curNote.timing * beatLength;
     var curTime = new Date().getTime();
-    var notePlayDelay = curNoteTimingMs - (curTime - startTime);
+    var notePlayDelay = curNoteTimingMs - (curTime - melodyStartTime);
     setTimeout(playNote.bind(null, curNote), notePlayDelay);
 
     var noteEndDelay = notePlayDelay + noteListeningBuffer;
@@ -52,7 +54,7 @@ Controller.play = function (metronome, countOff) {
     if (nextNote) {
       var nextNoteTimingMs = nextNote.timing * beatLength;
       var midNoteTimingMs = (nextNoteTimingMs + curNoteTimingMs) / 2; // halfway between curNote and nextNote
-      var midNoteDelay = midNoteTimingMs - (curTime - startTime);
+      var midNoteDelay = midNoteTimingMs - (curTime - melodyStartTime);
       noteEndDelay = Math.min(noteEndDelay, midNoteDelay);
     }
     setTimeout(endNoteHandlerAndSetUpNextStart, noteEndDelay);
@@ -82,14 +84,30 @@ Controller.play = function (metronome, countOff) {
 
     nextNoteStart = Math.max(nextNoteStart, midNoteTimingMs);
     var curTime = new Date().getTime();
-    var nextNoteStartDelay = nextNoteStart - (curTime - startTime);
+    var nextNoteStartDelay = nextNoteStart - (curTime - melodyStartTime);
     setTimeout(startNoteHandlerAndSetUpEnd, nextNoteStartDelay);
   }
 
-  if (metronome) {
-    playMetronome();
+  var countOffTicksPlayed = 0;
+  function playCountOff () {
+    if (countOffTicksPlayed >= countOff) {
+      if (metronome) {
+        playMetronome();
+      }
+      startNoteHandlerAndSetUpEnd();
+      return;
+    }
+    playNote({ pitch: 'tick' });
+
+    countOffTicksPlayed++;
+    var nextClickTimingMs = countOffTicksPlayed * beatLength;
+    var curTime = new Date().getTime();
+    var nextClickDelay = nextClickTimingMs - (curTime - startTime);
+
+    setTimeout(playCountOff, nextClickDelay);
   }
-  startNoteHandlerAndSetUpEnd();
+
+  playCountOff();
 };
 
 Controller.stop = function () {

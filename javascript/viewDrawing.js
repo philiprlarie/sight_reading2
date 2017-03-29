@@ -36,8 +36,7 @@ function splitIntoMeasures (melody) {
   var measures = [];
   var ties = [];
 
-  // i = 4 to start so we can skip countOff
-  for (var i = 4; i < melody.notes.length; i++) {
+  for (var i = 0; i < melody.notes.length; i++) {
     var note = melody.notes[i];
     // first note in measure
     if (note.timing % 4 === 0) {

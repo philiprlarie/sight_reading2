@@ -70,25 +70,19 @@ Melody.prototype.resetPlayedCorreclty = function () {
   });
 };
 
-function createMelodyQuarterNotes (pitches, melodyDuration, countOffDuration) {
+function createMelodyQuarterNotes (pitches, melodyDuration) {
   // melodyDuration in beats (quarter note beats)
   this.notes = [];
   this.totDur = 0;
 
-  if (!(countOffDuration === 0)) {
-    countOffDuration = countOffDuration || 4;
-  }
-  for (var countOff = 0; countOff < countOffDuration; countOff++) {
-    this.addNote(new Note('tick', 1));
-  }
 
-  while (this.totDur < melodyDuration + countOffDuration) {
+  while (this.totDur < melodyDuration) {
     var note = new Note(pitches.sample(), 1);
     this.addNote(note);
   }
 }
 
-function createMelodyQuarterNotesWithRests (pitches, melodyDuration, countOffDuration, portionRests) {
+function createMelodyQuarterNotesWithRests (pitches, melodyDuration, portionRests) {
   // melodyDuration in beats (quarter note beats)
   this.notes = [];
   this.totDur = 0;
@@ -97,14 +91,8 @@ function createMelodyQuarterNotesWithRests (pitches, melodyDuration, countOffDur
   if (!(portionRests === 0)) {
     portionRests = portionRests || 0.25;
   }
-  if (!(countOffDuration === 0)) {
-    countOffDuration = countOffDuration || 4;
-  }
-  for (var countOff = 0; countOff < countOffDuration; countOff++) {
-    this.addNote(new Note('tick', 1));
-  }
 
-  while (this.totDur < melodyDuration + countOffDuration) {
+  while (this.totDur < melodyDuration) {
     var randNum = Math.random();
     var note;
     if (randNum < portionRests) {
@@ -116,33 +104,26 @@ function createMelodyQuarterNotesWithRests (pitches, melodyDuration, countOffDur
   }
 }
 
-function createMelodyQuarterAndEightNotes (pitches, melodyDuration, countOffDuration) {
+function createMelodyQuarterAndEightNotes (pitches, melodyDuration) {
   // melodyDuration in beats (quarter note beats)
   this.notes = [];
   this.totDur = 0;
 
-  if (!(countOffDuration === 0)) {
-    countOffDuration = countOffDuration || 4;
-  }
-  for (var countOff = 0; countOff < countOffDuration; countOff++) {
-    this.addNote(new Note('tick', 1));
-  }
-
   var possibleNoteDurations = [0.5, 1];
   var note;
-  while (this.totDur < melodyDuration + countOffDuration) {
+  while (this.totDur < melodyDuration) {
     note = new Note(pitches.sample(), possibleNoteDurations.sample());
     this.addNote(note);
   }
 
-  if (this.totDur > melodyDuration + countOffDuration) {
+  if (this.totDur > melodyDuration) {
     this.removeLastNote();
     note = new Note(pitches.sample(), 0.5);
     this.addNote(note);
   }
 }
 
-function createMelodyQuarterAndEightNotesWithRests (pitches, melodyDuration, countOffDuration, portionRests) {
+function createMelodyQuarterAndEightNotesWithRests (pitches, melodyDuration, portionRests) {
   // melodyDuration in beats (quarter note beats)
   this.notes = [];
   this.totDur = 0;
@@ -150,24 +131,18 @@ function createMelodyQuarterAndEightNotesWithRests (pitches, melodyDuration, cou
   if (!(portionRests === 0)) {
     portionRests = portionRests || 0.25;
   }
-  if (!(countOffDuration === 0)) {
-    countOffDuration = countOffDuration || 4;
-  }
-  for (var countOff = 0; countOff < countOffDuration; countOff++) {
-    this.addNote(new Note('tick', 1));
-  }
 
   var possibleNoteDurations = [0.5, 1];
   var note;
   var duration;
   var pitch;
-  while (this.totDur < melodyDuration + countOffDuration) {
+  while (this.totDur < melodyDuration) {
     var randNum = Math.random();
     pitch = randNum < portionRests ? 'rest' : pitches.sample();
     duration = possibleNoteDurations.sample();
 
     var previousNote = this.notes[this.notes.length - 1];
-    if (this.totDur + duration > melodyDuration + countOffDuration) {
+    if (this.totDur + duration > melodyDuration) {
       // last note extends beyone end of melody
       duration = 0.5;
     }
