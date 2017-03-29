@@ -32,7 +32,8 @@ $(function () {
     $('button').blur();
     if (event.charCode === 32) { // start/stop playback on spacebar
       event.preventDefault();
-      View.requestTogglePlay(false, 4);
+      var metronome = $('#metronome').is(':checked');
+      View.requestTogglePlay(metronome, 4);
     }
     if (event.charCode === 13) { // generate new melody on carriage return
       event.preventDefault();
