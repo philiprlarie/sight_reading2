@@ -38,8 +38,7 @@ $(function () {
     if (event.charCode === 13) { // generate new melody on carriage return
       event.preventDefault();
       View.requestStop();
-      var clef = $(':radio:checked')[0].value;
-      View.requestNewMelody(clef);
+      requestNewMelody();
     }
     var letter = String.fromCharCode(event.charCode).toUpperCase();
     if (View.arrowsUpDown.upArrow) {
